@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- Uses omdpapi.com to check movie information -->
+<html>
+
+<body>
+
+<h1>Movie Age Calculator</h1>
+<input type = "text" id = "userinput"></input>
+<button type = "button" onclick = "requestOMDB()"> Submit </button>
+<div id="movieDate"></div>
+<div id="actors"></div>
+<div id= "full"></div>
+
+
+<script>
+
+function requestOMDB() {
+            var name = document.getElementById("userinput").value;
+            name = name.replace(" ", "+");
+            var url = "http://www.omdbapi.com/?t="+name+"&y=&plot=short&r=json";
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("full").innerHTML = url;
+                myFunction(xmlhttp.responseText);
+
+    }
+};
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+
+
+
+    }
+
+
+
+function myFunction(response) {
+    var movieData = JSON.parse(response);
+    var releaseDate = movieData.Released;
+    var actors = movieData.Actors;
+    if(movieData.Response.toLowerCase() == "false"){
+        document.getElementById("full").innerHTML = "Movie Not Found";
+
+    }
+    else{
+
+
+    document.getElementById("movieDate").innerHTML = releaseDate;
+    document.getElementById("actors").innerHTML = actors;
+    document.getElementById("full").innerHTML = movieData.Response;
+    }
+}
+</script>
+
+</body>
+</html>
