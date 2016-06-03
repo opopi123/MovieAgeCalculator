@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <!-- Uses omdpapi.com to check movie information -->
+<! -- actorData.data.names[0].dateOfBirth -->
 <html>
 
-<body>
+<head>
+    <title>Movie Age</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+</head>
 
-<h1>Movie Age Calculator</h1>
-<input type = "text" id = "userinput"></input>
+<body>
+<header class ="container">
+    <div class = "row">
+        <h1 class = "col-sm-8">Movie Age Calculator</h1>
+    </div>
+</header>
+
+<div class = "container">
+    <div class = "row text-center">
+<input type = "text" id = "userinput">Movie Title</input>
+<input type = "number" id = "yearinput">Year</input>
+
 <button type = "button" onclick = "requestOMDB()"> Submit </button>
+</div>
+</div>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-sm-3">
 <div id="movieDate"></div>
 <div id="actors"></div>
+<div id="empty"></div>
+        </div>
+        <div class = "col-sm-3">
+<div id = "actorsBday"></div>
+<div id = "actorsPast"></div>
 <div id= "full"></div>
+        </div> 
+    </div>
+</div>
 
 
 <script>
@@ -17,13 +45,14 @@
 function requestOMDB() {
             var name = document.getElementById("userinput").value;
             name = name.replace(" ", "+");
-            var url = "http://www.omdbapi.com/?t="+name+"&y=&plot=short&r=json";
+            var year = document.getElementById("yearinput").value;
+            var url = "http://www.omdbapi.com/?t="+name+"&y="+year+"&plot=short&r=json";
 
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("full").innerHTML = url;
-                myFunction(xmlhttp.responseText);
+            
+                responseFunc(xmlhttp.responseText);
 
     }
 };
@@ -36,7 +65,7 @@ function requestOMDB() {
 
 
 
-function myFunction(response) {
+function responseFunc(response) {
     var movieData = JSON.parse(response);
     var releaseDate = movieData.Released;
     var actors = movieData.Actors;
@@ -47,11 +76,48 @@ function myFunction(response) {
     else{
 
 
-    document.getElementById("movieDate").innerHTML = releaseDate;
-    document.getElementById("actors").innerHTML = actors;
-    document.getElementById("full").innerHTML = movieData.Response;
+    document.getElementById("movieDate").innerHTML = "Release Date of Film : " + releaseDate;
+
+    var actorarray = actors.split(",");
+    var i;
+    var arrlength = actorarray.length;
+    var actorout = "";
+
+    for(i=0; i < arrlength; i++){
+
+        var actorAge = requestMyApiFilm(actorarray[i]);
+        actorout += actorarray[i]+ ":" /*+ actorAge */ + "<br>" ;
+    };
+
+    document.getElementById("actors").innerHTML = actorout;
+
+    
+    
+
     }
 }
+function requestMyApiFilm(actorName){
+
+    var name = actorName.toLowerCase();
+    name = name.replace(" ", "+");
+    var mafurl = "http://www.myapifilms.com/imdb/idIMDB?name="+name+"&token=59d810d5-7bf7-4201-b8cc-76f4f6d07a45&format=json&language=en-us&filmography=0&exactFilter=0&limit=1&bornDied=1&starSign=0&uniqueName=0&actorActress=0&actorTrivia=0&actorPhotos=0&actorVideos=0&salary=0&spouses=0&tradeMark=0&personalQuotes=0&starMeter=0&fullSize=0"
+    var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+                var parseData = JSON.parse(xmlhttp.responseText);
+                return parseData.data.names[0].dateOfBirth;
+                
+
+
+              }
+        };
+        xmlhttp.open("GET", mafurl, true);
+        xmlhttp.send();
+
+
+}
+
 </script>
 
 </body>

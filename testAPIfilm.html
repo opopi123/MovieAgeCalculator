@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>Customers</h1>
+<div id="id01"></div>
+
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "http://www.myapifilms.com/imdb/idIMDB?name=matt+damon&token=59d810d5-7bf7-4201-b8cc-76f4f6d07a45&format=json&language=en-us&filmography=0&exactFilter=0&limit=1&bornDied=1&starSign=0&uniqueName=0&actorActress=0&actorTrivia=0&actorPhotos=0&actorVideos=0&salary=0&spouses=0&tradeMark=0&personalQuotes=0&starMeter=0&fullSize=0";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {   
+		 document.getElementById("id01").innerHTML = response;
+}
+</script>
+
+</body>
+</html>
