@@ -32,8 +32,8 @@
 <div id="empty"></div>
         </div>
         <div class = "col-sm-3">
-<div id = "actorsBday"></div>
-<div id = "actorsPast"></div>
+<div id = "movieDateResult"></div>
+<div id = "actorsPastAge"></div>
 <div id= "full"></div>
         </div> 
     </div>
@@ -41,6 +41,8 @@
 
 
 <script>
+
+var ageArray = "<br> <br>";
 
 function requestOMDB() {
             var name = document.getElementById("userinput").value;
@@ -66,6 +68,7 @@ function requestOMDB() {
 
 
 function responseFunc(response) {
+
     var movieData = JSON.parse(response);
     var releaseDate = movieData.Released;
     var actors = movieData.Actors;
@@ -76,27 +79,39 @@ function responseFunc(response) {
     else{
 
 
-    document.getElementById("movieDate").innerHTML = "Release Date of Film : " + releaseDate;
+    document.getElementById("movieDate").innerHTML = "Release Date of Film : ";
+    document.getElementById("movieDateResult").innerHTML = releaseDate;
 
     var actorarray = actors.split(",");
     var i;
     var arrlength = actorarray.length;
-    var actorout = "";
+    var actorout = "Actors : <br> <br>";
 
     for(i=0; i < arrlength; i++){
 
-        var actorAge = requestMyApiFilm(actorarray[i]);
-        actorout += actorarray[i]+ ":" /*+ actorAge */ + "<br>" ;
+        actorout += actorarray[i]+ "<br>" ;
+
+        
     };
 
     document.getElementById("actors").innerHTML = actorout;
 
-    
+    //a for loop that sends requests to myapifilms for all actors needed here
+    ageArray = "<br> <br>";
+
+    for (i = 0; i <arrlength; i ++){
+
+        requestMyApiFilm(actorarray[i]);
+
+    }
+
+
     
 
     }
 }
 function requestMyApiFilm(actorName){
+
 
     var name = actorName.toLowerCase();
     name = name.replace(" ", "+");
@@ -105,18 +120,33 @@ function requestMyApiFilm(actorName){
             xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
-                var parseData = JSON.parse(xmlhttp.responseText);
-                return parseData.data.names[0].dateOfBirth;
+            appendToAgeList(xmlhttp.responseText);
                 
-
 
               }
         };
-        xmlhttp.open("GET", mafurl, true);
+        xmlhttp.open("GET", mafurl, false);
         xmlhttp.send();
 
 
 }
+function appendToAgeList(response){
+    var parseData = JSON.parse(response);
+    ageArray = ageArray + parseData.data.names[0].dateOfBirth + "<br>";
+    document.getElementById("actorsPastAge").innerHTML = ageArray;
+}
+
+function calculateAgeAtTime(bday,release){
+
+    var bdayArr = bday.split(" ");
+    var relArr = release.split(" ");
+    
+
+
+
+}
+
+
 
 </script>
 
