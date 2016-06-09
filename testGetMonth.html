@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<input type = "text" id = "month"></input>
+	<button type = "button" onclick = "getMonth()">Submit </button>
+	<div id = "result"> </div>
+
+
+	<script type="text/javascript">
+
+	function getMonth(){
+		var mon = document.getElementById("month").value;
+		//mon = String(mon);
+		mon = mon.toLowerCase();
+		mon = mon.slice(0,3);
+		document.getElementById("result").innerHTML = mon;
+		alert( "janfebmaraprmayjunjulaugsepoctnovdec".indexOf(mon) / 3 + 1 );
+	}
+
+
+	</script>
+	</body>
+</html>
