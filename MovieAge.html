@@ -26,17 +26,20 @@
 
 <div class = "container">
     <div class = "row">
-        <div class = "col-sm-3">
+        <div class = "col-sm-4">
 <div id="movieDate"></div>
 <div id="actors"></div>
 <div id="empty"></div>
         </div>
-        <div class = "col-sm-3">
+        <div class = "col-sm-4">
 <div id = "movieDateResult"></div>
 <div id = "actorsBday"></div>
-<div id = "actorsPastAge"></div>
 <div id= "full"></div>
-        </div> 
+
+        </div>
+        <div class = "col-sm-4"> 
+        <div id = "actorsPastAge"></div>
+    </div>
     </div>
 </div>
 
@@ -44,9 +47,11 @@
 <script>
 
 var ageArray = "<br> <br>";
-var pastAgeArray = "<br> <br>";
+var pastAgeArray = "<br> Age at Release of Movie: <br> <br> ";
 
 function requestOMDB() {
+    ageArray = "<br> <br>";
+    pastAgeArray = "<br> Age at Release of Movie: <br> <br> ";
             var name = document.getElementById("userinput").value;
             name = name.replace(" ", "+");
             var year = document.getElementById("yearinput").value;
@@ -100,6 +105,7 @@ function responseFunc(response) {
 
     //a for loop that sends requests to myapifilms for all actors needed here
     ageArray = "<br> <br>";
+    pastAgeArray = "<br> Age at Release of Movie: <br> <br> ";
 
     for (i = 0; i <arrlength; i ++){
 
