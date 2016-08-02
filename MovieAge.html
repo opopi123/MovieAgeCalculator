@@ -6,6 +6,8 @@
 <head>
     <title>Movie Age</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type = "text/css" href="MovieAge.css"/>
+        <link rel="stylesheet" type = "text/css" href = "load.css"/>
 </head>
 
 <body>
@@ -50,6 +52,13 @@ var ageArray = "<br> <br>";
 var pastAgeArray = "<br> Age at Release of Movie: <br> <br> ";
 
 function requestOMDB() {
+    document.getElementById("empty").setAttribute("id", "load");
+    document.getElementById("movieDate").innerHTML = "";
+    document.getElementById("actors").innerHTML = "";
+    document.getElementById("movieDateResult").innerHTML = "";
+    document.getElementById("actorsBday").innerHTML = "";
+    document.getElementById("full").innerHTML = "";
+    document.getElementById("actorsPastAge").innerHTML = "";
     ageArray = "<br> <br>";
     pastAgeArray = "<br> Age at Release of Movie: <br> <br> ";
             var name = document.getElementById("userinput").value;
@@ -121,6 +130,7 @@ function responseFunc(response) {
 function requestMyApiFilm(actorName,releaseDate){
 
 
+
     var name = actorName.toLowerCase();
     name = name.replace(" ", "+");
     var mafurl = "http://www.myapifilms.com/imdb/idIMDB?name="+name+"&token=59d810d5-7bf7-4201-b8cc-76f4f6d07a45&format=json&language=en-us&filmography=0&exactFilter=0&limit=1&bornDied=1&starSign=0&uniqueName=0&actorActress=0&actorTrivia=0&actorPhotos=0&actorVideos=0&salary=0&spouses=0&tradeMark=0&personalQuotes=0&starMeter=0&fullSize=0"
@@ -140,10 +150,18 @@ function requestMyApiFilm(actorName,releaseDate){
 }
 function appendToAgeList(response,releaseDate){
     var parseData = JSON.parse(response);
+    if(response.hasOwnProperty("error") || !response.hasOwnProperty("dateOfBirth")){
+            ageArray = ageArray + "Name not Found"+ "<br>";
+            pastAgeArray += "Name not Found" + "<br>";
+
+    }
+    else{
     ageArray = ageArray + parseData.data.names[0].dateOfBirth + "<br>";
     pastAgeArray += calculateAgeAtTime(parseData.data.names[0].dateOfBirth,releaseDate) + "<br>";
+        }
     document.getElementById("actorsBday").innerHTML = ageArray;
     document.getElementById("actorsPastAge").innerHTML = pastAgeArray;
+    document.getElementById("load").setAttribute("id","empty");
 }
 
 function calculateAgeAtTime(bday,release){
